@@ -7,15 +7,42 @@
 
 using namespace std;
 
-TEST(Anker_tests, add_note_test)
+TEST(Anker_tests, create_deck_test)
 {
     Anker anker;
 
-    cout << anker.add_note(
-        "demo",
-        "Basic",
-        "This is front",
-        "This is back",
-        { "tag1", "tag2" }
+    std::string deck_name = "Math";
+
+    EXPECT_TRUE( anker.create_deck(const string deck_name, const string parent_deck_name) );
+    
+    EXPECT_TRUE( anker.has_deck(const std::string deck name) );
+}
+
+TEST(Anker_tests, add_new_card_test)
+{
+    Anker anker;
+
+    // card info
+    std::string deck_name = "demo";
+    std::string note_type = "basic";
+    std::string front_content = "this is front";
+    std::string back_content = "this is back";
+    std::vector< std::string > tags = { "math","calculus" };
+    bool allow_duplicate = true;
+
+    EXPECT_TRUE( anker.add_card(
+            deck_name,
+            note_type,
+            front_content,
+            back_content,
+            tags,
+            allow_duplicate
+        ) 
     );
+
+    EXPECT_TRUE( anker.has_card(card_name) );
+
+    EXPECT_TRUE( anker.delete_card(card_name) );
+
+    EXPECT_FALSE( anker.has_card(card_name) );
 }

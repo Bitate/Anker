@@ -8,14 +8,14 @@ std::string Anker::send_request( Json::Value& request )
 
     const std::string json_request = Json::writeString(string_builder, request);
 
-    auto result = client.Post("/", json_request, "application/json");
+    auto response = client.Post("/", json_request, "application/json");
 
-    if(result->status != 200)
+    if(response->status != 200)
     {
         return {};
     }
 
-    return result->body;
+    return response->body;
 }
 
 std::string Anker::add_note( 
