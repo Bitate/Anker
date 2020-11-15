@@ -46,3 +46,22 @@ TEST(Anker_tests, add_new_card_test)
 
     EXPECT_FALSE( anker.has_card(card_name) );
 }
+
+TEST(Anker_tests, add_image_test)
+{   
+    Anker anker;
+    std::vector< uint8_t > image_in_binary;
+}
+
+TEST(Anker_tests, add_video_test)
+{
+    Anker anker;
+    std::vector< uint8_t > video_in_binary;
+}
+
+TEST(Anker_tests, add_audio_test)
+{
+    Anker anker;
+    std::vector< uint8_t > audio_in_binary;
+}
+

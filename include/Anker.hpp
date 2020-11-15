@@ -15,6 +15,21 @@ public:
      */
     std::string send_request( Json::Value& request );
     
+    bool create_deck(const std::string& deck_name, const std::string& parent_deck_name);
+
+    bool has_deck(const std::string& deck_name);
+
+    bool add_card(
+        const std::string& deck_name,
+        const std::string& note_type,
+        const std::string& front_content,
+        const std::string& back_content,
+        const std::vector< std::string >& tags,
+        bool allow_duplicate
+    );
+
+    bool delete_card(const std::string& card_name);
+
     /**
      * @brief  Add a new note to anki.
      * @param  deck_name  Deck name.
