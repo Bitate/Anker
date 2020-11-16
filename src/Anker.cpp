@@ -57,7 +57,22 @@ std::string Anker::add_note(
     request["version"] = 6;
     request["params"] = request_params;
 
-    send_request( request );
-
     return send_request( request );
+}
+
+std::vector< std::string > Anker::get_deck_names()
+{
+    Json::Value request;
+    request["action"] = "deckNames";
+    request["version"] = 6;
+
+
+    Json::Value response_json( send_request( request ) );
+
+    std::cout << response_json["result"];
+
+    if( send_request( request ) == "\"error\": null" )
+        return { {} };
+    else // error happened
+        return { {} };
 }

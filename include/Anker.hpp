@@ -49,5 +49,10 @@ public:
         const bool allow_duplicate = false
     );
 
+    std::vector< std::string > get_deck_names();
+
+private:
     
+    
+
 };
