@@ -4,11 +4,13 @@ set(all_header_files
     ../include/Anker.hpp
     ../include/httplib.h
     ../include/Window.hpp
+    ../include/Clipboard.hpp
 )
 
 set(all_source_files
     Anker.cpp
     Window.cpp
+    Clipboard.cpp
 )
 
 add_library(Anker STATIC

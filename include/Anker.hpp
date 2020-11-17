@@ -3,6 +3,7 @@
 #include "httplib.h"
 
 #include <string>
+#include <stack>
 #include <json/json.h>
 
 class Anker
@@ -51,8 +52,9 @@ public:
 
     std::vector< std::string > get_deck_names();
 
+    bool get_last_record_from_clipboard();
+
 private:
-    
     
 
 };

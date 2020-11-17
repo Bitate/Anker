@@ -76,3 +76,4 @@ std::vector< std::string > Anker::get_deck_names()
     else // error happened
         return { {} };
 }
+

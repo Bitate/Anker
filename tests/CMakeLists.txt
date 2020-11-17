@@ -4,7 +4,12 @@ add_executable(Anker_Test
 target_link_libraries(Anker_Test
     Anker
     gtest_main
-    Qt::Gui
 )
 
-
+add_executable(Clipboard_Test
+    Clipboard_Test.cpp
+)
+target_link_libraries(Clipboard_Test
+    Anker
+    gtest_main
+)
