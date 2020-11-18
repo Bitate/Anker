@@ -7,6 +7,7 @@ TEST(clipboard_tests, open_and_close_clipboard_test)
     Clipboard clipboard;
 
     EXPECT_TRUE( clipboard.open_clipboard() );
+    EXPECT_TRUE( clipboard.is_clipboard_stack_empty() );
     EXPECT_TRUE( clipboard.close_clipboard() );
 }
 
@@ -16,9 +17,13 @@ TEST(clipboard_tests, set_and_get_clipboard_text_test)
     
     std::string text = "This is text copied into clipboard";
 
+    EXPECT_TRUE( clipboard.is_clipboard_stack_empty() );
+
     EXPECT_TRUE( clipboard.set_clipboard_text(text) );
     
     EXPECT_TRUE( clipboard.get_clipboard_text() );  
     
+    EXPECT_FALSE( clipboard.is_clipboard_stack_empty() );
+
     EXPECT_EQ( clipboard.get_last_text(), text );
 }

@@ -34,7 +34,18 @@ public:
      */
     bool get_clipboard_text();
 
+    /**
+     * @brief  Set given text to the top of clipboard.
+     * @param  text  Given text to be put on the top of the clipboard.
+     * @return  True if succeeds.
+     */
     bool set_clipboard_text(const std::string& text);
+
+    /**
+     * @brief  Whether is the clipboard stack is empty?
+     * @return  True if the clipboard_stack is empty.
+     */
+    bool is_clipboard_stack_empty();
 
     /**
      * @brief  Get the last text within clipboard_stack.

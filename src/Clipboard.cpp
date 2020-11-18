@@ -72,3 +72,7 @@ std::string& Clipboard::get_last_text()
     return clipboard_stack.top();
 }
 
+bool Clipboard::is_clipboard_stack_empty()
+{
+    return clipboard_stack.empty();
+}
