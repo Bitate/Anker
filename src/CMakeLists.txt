@@ -3,14 +3,14 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 set(all_header_files
     ../include/Anker.hpp
     ../include/httplib.h
-    ../include/Window.hpp
     ../include/Clipboard.hpp
+    ../include/Media_Handler.hpp
 )
 
 set(all_source_files
     Anker.cpp
-    Window.cpp
     Clipboard.cpp
+    Media_Handler.cpp
 )
 
 add_library(Anker STATIC
@@ -20,5 +20,4 @@ add_library(Anker STATIC
 
 target_link_libraries(Anker  
     jsoncpp_static
-    Qt${QT_VERSION_MAJOR}::Widgets
 )

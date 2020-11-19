@@ -1,5 +1,4 @@
-#ifndef CLIPBOARD_HPP
-#define CLIPBOARD_HPP
+#pragma once
 
 #include <stack>
 #include <string>
@@ -56,5 +55,3 @@ public:
 private:
     std::stack< std::string > clipboard_stack;
 };
-
-#endif

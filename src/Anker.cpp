@@ -1,6 +1,6 @@
 #include "Anker.hpp"
 
-std::string Anker::send_request( Json::Value& request )
+Json::Value Anker::send_request( Json::Value& request )
 {
     httplib::Client client("localhost", 8765);
 
@@ -12,13 +12,37 @@ std::string Anker::send_request( Json::Value& request )
 
     if(response->status != 200)
     {
-        return {};
+        return Json::objectValue;
     }
 
-    return response->body;
+    /**
+     * How to convert std::string to Json::Value?
+     * https://stackoverflow.com/a/50084636/11850070
+     */
+    Json::CharReaderBuilder builder;
+    Json::CharReader* reader = builder.newCharReader();
+
+    Json::Value json;
+    std::string errors;
+
+    bool parsing_succeeds = reader->parse(
+        response->body.c_str(),
+        response->body.c_str() + response->body.size(),
+        &json,
+        &errors
+    );
+
+    delete reader;
+
+    if(!parsing_succeeds)
+    {
+        return Json::objectValue;
+    }
+
+    return json;
 }
 
-std::string Anker::add_note( 
+bool Anker::add_note( 
     const std::string& deck_name,
     const std::string& note_type,
     const std::string& front_content,
@@ -57,23 +81,97 @@ std::string Anker::add_note(
     request["version"] = 6;
     request["params"] = request_params;
 
-    return send_request( request );
+    return !is_request_failed( send_request(request) );
 }
 
 std::vector< std::string > Anker::get_deck_names()
 {
+    // Sample request:
+
+    // {
+    //     "action": "deckNames",
+    //     "version": 6
+    // }
+
     Json::Value request;
     request["action"] = "deckNames";
     request["version"] = 6;
 
+    Json::Value result_array = send_request(request)["result"];
 
-    Json::Value response_json( send_request( request ) );
-
-    std::cout << response_json["result"];
-
-    if( send_request( request ) == "\"error\": null" )
-        return { {} };
-    else // error happened
-        return { {} };
+    std::vector< std::string > deck_names;
+    for(auto& deck_name : result_array)
+    {
+        deck_names.push_back(deck_name.asString());
+    }
+    
+    return deck_names;
 }
 
+bool Anker::create_deck(const std::string& deck_name)
+{   
+    // Sample request:
+
+    // {
+    //     "action": "createDeck",
+    //     "version": 6,
+    //     "params": {
+    //         "deck": "Japanese::Tokyo"
+    //     }
+    // }
+    
+    Json::Value request_params;
+    request_params["deck"] = deck_name;
+
+    Json::Value request;
+    request["action"] = "createDeck";
+    request["version"] = 6;
+    request["params"] = request_params;
+
+    return !is_request_failed( send_request(request) );
+}
+
+bool Anker::has_deck(const std::string& deck_name)
+{
+    std::vector< std::string > deck_names = get_deck_names();
+
+    for(auto& anki_deck_name : deck_names)
+        if(anki_deck_name == deck_name)
+            return true;
+
+    return false;
+}
+
+bool Anker::is_request_failed(const Json::Value& response)
+{
+    return response.toStyledString().find("\"error\" : null") == std::string::npos ? true : false;
+}
+
+bool Anker::delete_deck(const std::string& deck_name, const bool cards_too)
+{
+    // Sample request:
+
+    // {
+    //     "action": "deleteDecks",
+    //     "version": 6,
+    //     "params": 
+    //     {
+    //         "decks": ["Japanese::JLPT N5", "Easy Spanish"],
+    //         "cardsToo": true
+    //     }
+    // }
+
+    Json::Value deck_names(Json::arrayValue);
+    deck_names[0] = deck_name;
+    
+    Json::Value request_params;
+    request_params["decks"] = deck_names;
+    request_params["cardsToo"] = cards_too;
+
+    Json::Value request;
+    request["action"] = "deleteDecks";
+    request["version"] = 6;
+    request["params"] = request_params;
+
+    return !is_request_failed( send_request(request) );
+}
