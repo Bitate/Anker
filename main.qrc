@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qmls/mainWindow.qml</file>
+        <file>qmls/videoWindow.qml</file>
+    </qresource>
+</RCC>

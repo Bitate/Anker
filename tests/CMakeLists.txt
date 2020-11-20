@@ -21,4 +21,3 @@ target_link_libraries(Media_Handler_Test
     Anker
     gtest_main
 )
-
