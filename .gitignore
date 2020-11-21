@@ -5,3 +5,8 @@ build
 out
 googletest
 CMakeLists.txt.user
+qt-build
+*.mp3
+*.png
+*.jpg
+*.mp4

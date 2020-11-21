@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qmls/mainWindow.qml</file>
         <file>qmls/videoWindow.qml</file>
+        <file>media/audio/HaTom.mp3</file>
     </qresource>
 </RCC>

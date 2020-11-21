@@ -22,6 +22,9 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS
     Core
     Gui
     Quick
+    Multimedia
+    MultimediaWidgets
+    MultimediaQuick
 
     REQUIRED
 )
@@ -30,6 +33,9 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS
     Core
     Gui
     Quick
+    Multimedia
+    MultimediaWidgets
+    MultimediaQuick
 
     REQUIRED
 )
@@ -50,6 +56,9 @@ target_link_libraries(main_exec
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::Multimedia
+    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::MultimediaQuick
 )
 
 
