@@ -17,26 +17,21 @@
 #include <QAudioDeviceInfo>
 #include <QMediaPlayer>
 #include <QMessageBox>
+#include <QObject>
+#include <QFileDialog>
+
+#include "qtqml.h"
 
 int main(int argc, char *argv[])
 {
-    Anker anker;
+    qtQML qt;
 
-    auto anki_names = anker.get_deck_names();
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("app_directory_path", QGuiApplication::applicationDirPath());
+    engine.rootContext()->setContextProperty("app_directory_path", QApplication::applicationDirPath());
+    engine.rootContext()->setContextProperty("qt", &qt);
     engine.load(QUrl::fromLocalFile(":/qmls/mainWindow.qml"));
-
-    if(engine.rootObjects().isEmpty())
-    {
-        QMessageBox::warning(nullptr, "Error", "QML engine failed to load QML file");
-        return -1;
-    }
-
-    std::cout << "Running" << std::endl;
 
     return app.exec();
 }

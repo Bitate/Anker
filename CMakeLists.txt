@@ -46,6 +46,8 @@ add_subdirectory(tests)
 add_subdirectory(googletest)
 
 add_executable(main_exec
+    qtqml.cpp
+    qtqml.h
     main.cpp
     main.qrc
 )

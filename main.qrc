@@ -1,7 +1,22 @@
 <RCC>
     <qresource prefix="/">
         <file>qmls/mainWindow.qml</file>
-        <file>qmls/videoWindow.qml</file>
+    </qresource>
+    
+    <qresource prefix="/icons">
+        <file>media/icons/left-arrow.png</file>
+        <file>media/icons/open-file.png</file>
+        <file>media/icons/play.png</file>
+        <file>media/icons/right-arrow.png</file>
+    </qresource>
+    
+    <qresource prefix="/audio">
         <file>media/audio/HaTom.mp3</file>
+    </qresource>    
+    
+    <qresource prefix="/video">
+    </qresource>
+
+    <qresource prefix="/images">
     </qresource>
 </RCC>

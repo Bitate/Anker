@@ -1,4 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(all_header_files
     ../include/Anker.hpp
@@ -23,3 +22,5 @@ add_library(Anker STATIC
 target_link_libraries(Anker  
     jsoncpp_static
 )
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
