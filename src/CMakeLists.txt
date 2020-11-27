@@ -3,15 +3,11 @@ set(all_header_files
     ../include/Anker.hpp
     ../include/httplib.h
     ../include/Clipboard.hpp
-    ../include/Media_Handler.hpp
-    ../include/GUI.hpp
 )
 
 set(all_source_files
     Anker.cpp
     Clipboard.cpp
-    Media_Handler.cpp
-    GUI.cpp
 )
 
 add_library(Anker STATIC
