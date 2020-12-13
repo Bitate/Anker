@@ -47,4 +47,3 @@ TEST(Anker_tests, add_new_card_test)
 
     EXPECT_TRUE( anker.delete_deck(deck_name, true) );
 }
-

@@ -1,5 +1,10 @@
 #include "Anker.hpp"
 
+Anker::Anker(QObject* parent)
+    : QObject(parent)
+{
+}
+
 Json::Value Anker::send_request( Json::Value& request )
 {
     httplib::Client client("localhost", 8765);
@@ -174,4 +179,14 @@ bool Anker::delete_deck(const std::string& deck_name, const bool cards_too)
     request["params"] = request_params;
 
     return !is_request_failed( send_request(request) );
+}
+
+void Anker::set_folder_path(const QString& new_folder_path)
+{
+    folder_path = new_folder_path;
+}
+
+QString Anker::get_folder_path() const
+{
+    return folder_path;
 }

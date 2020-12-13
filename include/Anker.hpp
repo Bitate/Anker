@@ -4,10 +4,21 @@
 
 #include <string>
 #include <stack>
+#include <fstream>
+
 #include <json/json.h>
 
-class Anker
+#include <QObject>
+#include <QString>
+
+class Anker : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString folder_path READ get_folder_path WRITE set_folder_path NOTIFY folder_path_changed)
+public:
+    // why use explicit
+    explicit Anker(QObject* parent = nullptr);
+
 public:     
     /**
      * @brief  Send json request to anki.
@@ -72,4 +83,24 @@ public:
      * @return  True if the request failed.
      */
     bool is_request_failed(const Json::Value& response);
+
+    // Qt getters
+public:
+    QString get_folder_path() const;
+
+    // Qt setters
+public:
+    void set_folder_path(const QString& new_folder_path);
+
+    // Qt signals
+signals:
+    void folder_path_changed();
+
+    // Qt slots
+public slots:
+
+
+private:
+    std::shared_ptr< std::fstream > file_handler;
+    QString folder_path;
 };

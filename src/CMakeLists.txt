@@ -1,3 +1,9 @@
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(all_header_files
     ../include/Anker.hpp
@@ -15,8 +21,37 @@ add_library(Anker STATIC
     ${all_source_files}
 )
 
-target_link_libraries(Anker  
-    jsoncpp_static
+find_package(QT NAMES Qt6 Qt5 COMPONENTS
+    Widgets
+    Core
+    Gui
+    Quick
+    Multimedia
+    MultimediaWidgets
+    MultimediaQuick
+
+    REQUIRED
+)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS
+    Widgets
+    Core
+    Gui
+    Quick
+    Multimedia
+    MultimediaWidgets
+    MultimediaQuick
+
+    REQUIRED
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(Anker
+    jsoncpp_static
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Multimedia
+    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::MultimediaQuick
+    Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::Widgets
+)
+
