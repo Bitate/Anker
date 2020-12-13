@@ -4,19 +4,22 @@
 
 #include <string>
 #include <stack>
+#include <map>
 #include <fstream>
 
 #include <json/json.h>
 
+#include <QList>
+#include <QUrl>
 #include <QObject>
 #include <QString>
+#include <QDebug>
 
 class Anker : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString folder_path READ get_folder_path WRITE set_folder_path NOTIFY folder_path_changed)
+    Q_PROPERTY(QList<QUrl> file_urls READ get_file_urls WRITE set_file_urls NOTIFY file_urls_changed)
 public:
-    // why use explicit
     explicit Anker(QObject* parent = nullptr);
 
 public:     
@@ -86,21 +89,21 @@ public:
 
     // Qt getters
 public:
-    QString get_folder_path() const;
+    QList<QUrl> get_file_urls() const;
 
     // Qt setters
 public:
-    void set_folder_path(const QString& new_folder_path);
+    void set_file_urls(const QList<QUrl>& new_file_urls);
 
     // Qt signals
 signals:
-    void folder_path_changed();
+    void file_urls_changed(const QList<QUrl>& new_file_urls);
 
     // Qt slots
 public slots:
-
+    void response_to_file_urls_changed(const QList<QUrl>& new_file_urls);
 
 private:
-    std::shared_ptr< std::fstream > file_handler;
-    QString folder_path;
+    QList<QUrl> file_urls;
+    std::map<std::string, std::string> files_mapper;
 };

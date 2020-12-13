@@ -3,6 +3,7 @@
 Anker::Anker(QObject* parent)
     : QObject(parent)
 {
+    QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
 }
 
 Json::Value Anker::send_request( Json::Value& request )
@@ -181,12 +182,42 @@ bool Anker::delete_deck(const std::string& deck_name, const bool cards_too)
     return !is_request_failed( send_request(request) );
 }
 
-void Anker::set_folder_path(const QString& new_folder_path)
+void Anker::set_file_urls(const QList<QUrl>& new_file_urls)
 {
-    folder_path = new_folder_path;
+    file_urls = new_file_urls;
+    emit file_urls_changed(new_file_urls);
 }
 
-QString Anker::get_folder_path() const
+QList<QUrl> Anker::get_file_urls() const
 {
-    return folder_path;
+    return file_urls;
 }
+
+void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
+{
+    // Map each mp3 file to a corresponding lrc file.
+    foreach(QUrl file_url, new_file_urls)
+    {
+        if(file_url.fileName().toStdString().find(".mp3") != std::string::npos)
+            files_mapper.insert( {file_url.toString().toStdString(), ""} );
+    }
+    foreach(QUrl file_url, new_file_urls)
+    {
+        if(file_url.fileName().toStdString().find(".lrc") != std::string::npos)
+        {
+            // Form lrc file's corresponding mp3 file path
+            std::string mp3_file_path = file_url.toString().toStdString().substr(0, (file_url.toString().toStdString().size()-3)) + "mp3";
+            files_mapper[mp3_file_path] = file_url.toString().toStdString();
+        }
+    }
+
+    for(auto file_pair : files_mapper)
+    {
+        // e.g. First is:  file:///D:/Torrent Download/Aboboooooo/201210225151/9.mp3
+        qDebug() << "First is: " << file_pair.first.data() << '\n';
+        // e.g. Second is:  file:///D:/Torrent Download/Aboboooooo/201210225151/9.lrc
+        qDebug() << "Second is: " << file_pair.second.data() << '\n';
+    }
+}
+
+

@@ -26,7 +26,11 @@ ApplicationWindow {
 
     FileDialog {
         id: openFolderDialog
-
+        // selectFolder: true
+        selectMultiple: true
+        onAccepted: {
+            Anker.file_urls = openFolderDialog.fileUrls
+        }
     }
 
     Button {

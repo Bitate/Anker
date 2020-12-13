@@ -11,8 +11,11 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
 
     Anker anker;
-    // BUG: can not load qml file from qrc.
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    engine.load(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/../../main.qml"));
+
+    // TODO: change local file system to use qrc file system to handle resources
+    // engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     engine.rootContext()->setContextProperty("Anker", &anker);
     return app.exec();
 }
