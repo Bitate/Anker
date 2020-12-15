@@ -18,15 +18,18 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
+#include <QStringListModel>
 
 class Anker : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QUrl> file_urls READ get_file_urls WRITE set_file_urls NOTIFY file_urls_changed)
-    Q_PROPERTY(QList<QString> anki_deck_names READ get_anki_deck_names WRITE set_anki_deck_names NOTIFY anki_deck_names_changed)
+    Q_PROPERTY(QStringListModel* deck_name_list_model READ get_deck_name_list_model WRITE set_deck_name_list_model NOTIFY deck_name_list_model_changed)
     // Lifetime management
 public:
     explicit Anker(QObject* parent = nullptr);
+    ~Anker();
+
     // Normal public functions
 public:     
     /**
@@ -109,28 +112,29 @@ public:
     // Qt getters
 public:
     QList<QUrl> get_file_urls() const;
-    QList<QString> get_anki_deck_names() const;
+    QStringListModel* get_deck_name_list_model() const;
 
     // Qt setters
 public:
     void set_file_urls(const QList<QUrl>& new_file_urls);
-    void set_anki_deck_names(const QList<QString>& new_anki_deck_names);
+    void set_deck_name_list_model(QStringListModel* new_deck_name_list_mode);
 
     // Qt signals
 signals:
     void file_urls_changed(const QList<QUrl>& new_file_urls);
-    void anki_deck_names_changed(const QList<QString>& new_anki_deck_names);
+    void deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode);
 
     // Qt slots
 public slots:
     void response_to_file_urls_changed(const QList<QUrl>& new_file_urls);
+    void response_to_deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode);
 
 private:
     QList<QUrl> file_urls;
     std::map<std::string, std::string> files_mapper;
 
-    QString anki_deck_name;
-    QList<QString> anki_card_tags;
-    QList<QString> anki_deck_names;
+    QString target_deck_name;
 
+    QStringList deck_name_list;
+    QStringListModel* deck_name_list_model;
 };

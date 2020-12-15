@@ -1,15 +1,22 @@
 #include "Anker.hpp"
 
 Anker::Anker(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), deck_name_list_model(new QStringListModel())
 {
-    std::vector<std::string> all_deck_names = get_deck_names();
+    // For displaying deck names in hierarchy
     for(auto& deck_name : get_deck_names())
     {
-        anki_deck_names.append( QString(deck_name.c_str()) );
+        deck_name_list << QString::fromStdString(deck_name);
     }
 
+    deck_name_list_model->setStringList(deck_name_list);
+
     QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
+}
+
+Anker::~Anker()
+{
+    delete deck_name_list_model;
 }
 
 Json::Value Anker::send_request( Json::Value& request )
@@ -315,13 +322,18 @@ std::string Anker::trim_qt_file_url_prefix(const std::string& file_url_with_pref
     return file_url_with_prefix.substr(8);
 }
 
-void Anker::set_anki_deck_names(const QList<QString>& new_anki_deck_names)
+void Anker::set_deck_name_list_model(QStringListModel* new_deck_name_list_mode)
 {
-    anki_deck_names = new_anki_deck_names;
-    emit anki_deck_names_changed(new_anki_deck_names);
+    deck_name_list_model = new_deck_name_list_mode;
+    emit deck_name_list_model_changed(new_deck_name_list_mode);
 }
 
-QList<QString> Anker::get_anki_deck_names() const
+QStringListModel* Anker::get_deck_name_list_model() const
 {
-    return anki_deck_names;
+    return deck_name_list_model;
+}
+
+void Anker::response_to_deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode)
+{
+    // TODO:
 }

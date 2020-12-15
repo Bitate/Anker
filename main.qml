@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
@@ -33,45 +34,38 @@ ApplicationWindow {
         }
     }
 
+
     ListView {
-        id: listView
-        visible: false
-        x: 245
-        y: 160
-        width: 110
-        height: 160
+        id: deckNameListView
+        x: 50
+        y: 78
+        width: 380
+        height: 352
 
-        // TODO: display Anki deck names
-        model: {
+        model: Anker.deck_name_list_model
 
-        }
-
-        delegate: Item {
-            x: 5
-            width: 80
-            height: 40
-            Row {
-                id: row1
-                spacing: 10
-                Rectangle {
-                    width: 40
-                    height: 40
-                    color: colorCode
-                }
-
-                Text {
-                    text: name
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.bold: true
-                }
-            }
+        delegate: Text {
+            // TODO: weird "display"
+            text: display
         }
     }
+
+    Label {
+        id: deckNameLabel
+        x: 186
+        y: 43
+        width: 108
+        height: 29
+        text: qsTr("All Decks")
+        font.pointSize: 18
+        minimumPixelSize: 12
+    }
+
 
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;formeditorZoom:1.3300000429153442;height:480;width:640}
+    D{i:0;formeditorZoom:0.75}
 }
 ##^##*/
