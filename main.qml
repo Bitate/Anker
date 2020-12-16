@@ -15,7 +15,11 @@ ApplicationWindow {
 
             Action {
                 text: qsTr("&Open...")
-                onTriggered: openFolderDialog.open()
+                onTriggered: open_files_dialog.open()
+            }
+
+            Action {
+                text: qsTr("&TODO")
             }
 
             Action {
@@ -26,17 +30,22 @@ ApplicationWindow {
     }
 
     FileDialog {
-        id: openFolderDialog
-        // selectFolder: true
+        id: open_files_dialog
         selectMultiple: true
         onAccepted: {
-            Anker.file_urls = openFolderDialog.fileUrls
+            Anker.file_urls = open_files_dialog.fileUrls
         }
     }
 
+    MessageDialog {
+        id: on_chosen_message_dialog
+
+        title: "You have chosen deck:"
+        text: "Deck name goes here "
+    }
 
     ListView {
-        id: deckNameListView
+        id: deck_name_list_view
         x: 50
         y: 78
         width: 380
@@ -44,14 +53,15 @@ ApplicationWindow {
 
         model: Anker.deck_name_list_model
 
-        delegate: Text {
-            // TODO: weird "display"
-            text: display
+        delegate: Component {
+            Text {
+                text: display
+            }
         }
     }
 
     Label {
-        id: deckNameLabel
+        id: deck_name_label
         x: 186
         y: 43
         width: 108
@@ -61,11 +71,21 @@ ApplicationWindow {
         minimumPixelSize: 12
     }
 
+    Button {
+        id: open_files_button
+        x: 190
+        y: 436
+        text: qsTr("Open")
+        onClicked: {
+            open_files_dialog.open()
+        }
+    }
+
 
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}
+    D{i:0;formeditorZoom:0.6600000262260437}
 }
 ##^##*/

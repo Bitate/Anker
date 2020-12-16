@@ -11,6 +11,7 @@ Anker::Anker(QObject* parent)
 
     deck_name_list_model->setStringList(deck_name_list);
 
+    QObject::connect(this, &Anker::deck_name_list_model_changed, this, &Anker::response_to_deck_name_list_model_changed);
     QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
 }
 
@@ -335,5 +336,9 @@ QStringListModel* Anker::get_deck_name_list_model() const
 
 void Anker::response_to_deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode)
 {
-    // TODO:
+    QStringList deck_name_list = new_deck_name_list_mode->stringList();
+    foreach(auto& deck_name, deck_name_list)
+    {
+        qDebug() << "Deck Name: " << deck_name << '\n';
+    }
 }
