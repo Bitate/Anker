@@ -10,8 +10,7 @@ Anker::Anker(QObject* parent)
     }
 
     deck_name_list_model->setStringList(deck_name_list);
-
-    QObject::connect(this, &Anker::deck_name_list_model_changed, this, &Anker::response_to_deck_name_list_model_changed);
+    
     QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
 }
 
@@ -227,6 +226,7 @@ void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
 
     // Do not construct QProgressDialog in constructor, because the dialog will pop up immediately :)
     import_progress_dialog = new QProgressDialog("Importing", "Stop", 0, files_mapper.size());
+    import_progress_dialog->setWindowTitle("Anker");
 
     int progress_dialog_current_value = 0;
     for(auto file_pair : files_mapper)
@@ -255,7 +255,6 @@ void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
         // Trim the leading "[00:00.00]"
         std::string lrc_string = lrc_string_stream.str().substr(10);
 
-        // TODO: let user select deck
         if(!add_note(import_deck_name.toStdString(), anki_audio_link, lrc_string, {}))
         {
             // log: add note error
@@ -340,15 +339,6 @@ void Anker::set_deck_name_list_model(QStringListModel* new_deck_name_list_mode)
 QStringListModel* Anker::get_deck_name_list_model() const
 {
     return deck_name_list_model;
-}
-
-void Anker::response_to_deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode)
-{
-    QStringList deck_name_list = new_deck_name_list_mode->stringList();
-    foreach(auto& deck_name, deck_name_list)
-    {
-        qDebug() << "Deck Name: " << deck_name << '\n';
-    }
 }
 
 void Anker::set_import_deck_name(const QString& new_import_deck_name)

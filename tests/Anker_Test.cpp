@@ -68,3 +68,4 @@ TEST(Anker_tests, trim_qt_url_prefix)
     const std::string trimmed_file_url_2 = "D:/Aboboooooo/201210225151/9.mp3";
     EXPECT_EQ(anker.trim_qt_file_url_prefix(original_file_url_2), trimmed_file_url_2);
 }
+

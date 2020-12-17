@@ -17,10 +17,10 @@ add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(googletest)
 
-add_executable(main_exec
+add_executable(anker-win32 WIN32
     main.cpp
     main.qrc
 )
-target_link_libraries(main_exec
+target_link_libraries(anker-win32
     Anker
 )

@@ -9,13 +9,12 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
-
     Anker anker;
 
-    // Hard-coded path
-    // TODO: change local file system to use qrc file system to handle resources
-    engine.load(QUrl::fromLocalFile("C:/repos/Anker/main.qml"));
-
+    // Note: the path is hard-coded,
+    // I cannot load it if I use qrc
+    // to manage files.
+    engine.load("C:/repos/Anker/main.qml");
     engine.rootContext()->setContextProperty("Anker", &anker);
     return app.exec();
 }
