@@ -4,30 +4,11 @@ import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: applicationWindow
     title: "Anker"
     visible: true
-    width: 1024
-    height: 768
-
-    menuBar: MenuBar {
-        Menu {
-            title: "&File"
-
-            Action {
-                text: qsTr("&Open...")
-                onTriggered: open_files_dialog.open()
-            }
-
-            Action {
-                text: qsTr("&TODO")
-            }
-
-            Action {
-                text: qsTr("&Quit")
-                onTriggered: Qt.quit()
-            }
-        }
-    }
+    width: 420
+    height: 520
 
     FileDialog {
         id: open_files_dialog
@@ -39,53 +20,63 @@ ApplicationWindow {
 
     MessageDialog {
         id: on_chosen_message_dialog
-
         title: "You have chosen deck:"
         text: "Deck name goes here "
     }
 
     ListView {
         id: deck_name_list_view
-        x: 50
-        y: 78
-        width: 380
-        height: 352
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 84
+        anchors.leftMargin: 85
+        anchors.bottomMargin: 128
+        anchors.topMargin: 100
 
         model: Anker.deck_name_list_model
 
         delegate: Component {
-            Text {
+            CheckBox {
                 text: display
+                onCheckedChanged: Anker.import_deck_name = display
             }
         }
     }
 
     Label {
         id: deck_name_label
-        x: 186
-        y: 43
-        width: 108
-        height: 29
         text: qsTr("All Decks")
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 451
+        anchors.rightMargin: 156
+        anchors.leftMargin: 156
+        anchors.topMargin: 40
         font.pointSize: 18
         minimumPixelSize: 12
     }
 
     Button {
         id: open_files_button
-        x: 190
-        y: 436
         text: qsTr("Open")
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 411
+        anchors.bottomMargin: 75
+        anchors.rightMargin: 164
+        anchors.leftMargin: 165
         onClicked: {
             open_files_dialog.open()
         }
     }
-
-
 }
 
-/*##^##
-Designer {
-    D{i:0;formeditorZoom:0.6600000262260437}
-}
-##^##*/
+
+
+

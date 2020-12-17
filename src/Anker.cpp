@@ -210,7 +210,6 @@ QList<QUrl> Anker::get_file_urls() const
 void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
 {
     // Map each mp3 file to a corresponding lrc file.
-    // TODO: Trim file:/// of a Qt path
     foreach(QUrl file_url, new_file_urls)
     {
         if(file_url.fileName().toStdString().find(".mp3") != std::string::npos)
@@ -226,6 +225,10 @@ void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
         }
     }
 
+    // Do not construct QProgressDialog in constructor, because the dialog will pop up immediately :)
+    import_progress_dialog = new QProgressDialog("Importing", "Stop", 0, files_mapper.size());
+
+    int progress_dialog_current_value = 0;
     for(auto file_pair : files_mapper)
     {
         // 1. Move mp3 file to Anki media folder and change its name to the unique string;
@@ -241,7 +244,7 @@ void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
         std::ifstream lrc_file(file_pair.second.data());
         if(!lrc_file.is_open())
         {
-            // log it
+            // log: cannot open lrc file
             continue;
         }
 
@@ -253,13 +256,18 @@ void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
         std::string lrc_string = lrc_string_stream.str().substr(10);
 
         // TODO: let user select deck
-        add_note(
-            "aboboo",
-            anki_audio_link,
-            lrc_string,
-            {}
-        );
+        if(!add_note(import_deck_name.toStdString(), anki_audio_link, lrc_string, {}))
+        {
+            // log: add note error
+            continue;
+        }
+
+        // Update progress dialog value
+        import_progress_dialog->setValue(++progress_dialog_current_value);
+        QApplication::processEvents();
     }
+
+    delete import_progress_dialog;
 }
 
 std::string Anker::get_unique_identifier()
@@ -341,4 +349,9 @@ void Anker::response_to_deck_name_list_model_changed(const QStringListModel* new
     {
         qDebug() << "Deck Name: " << deck_name << '\n';
     }
+}
+
+void Anker::set_import_deck_name(const QString& new_import_deck_name)
+{
+    import_deck_name = new_import_deck_name;
 }

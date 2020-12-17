@@ -17,12 +17,15 @@
 #include <QUrl>
 #include <QObject>
 #include <QString>
+#include <QApplication>
+#include <QProgressDialog>
 #include <QDebug>
 #include <QStringListModel>
 
 class Anker : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString import_deck_name WRITE set_import_deck_name)
     Q_PROPERTY(QList<QUrl> file_urls READ get_file_urls WRITE set_file_urls NOTIFY file_urls_changed)
     Q_PROPERTY(QStringListModel* deck_name_list_model READ get_deck_name_list_model WRITE set_deck_name_list_model NOTIFY deck_name_list_model_changed)
     // Lifetime management
@@ -109,6 +112,8 @@ public:
 
     std::string trim_qt_file_url_prefix(const std::string& file_url_with_prefix);
 
+    void pop_up_error_dialog(const std::string& error_title, const std::string& error_info);
+
     // Qt getters
 public:
     QList<QUrl> get_file_urls() const;
@@ -118,6 +123,7 @@ public:
 public:
     void set_file_urls(const QList<QUrl>& new_file_urls);
     void set_deck_name_list_model(QStringListModel* new_deck_name_list_mode);
+    void set_import_deck_name(const QString& new_import_deck_name);
 
     // Qt signals
 signals:
@@ -133,8 +139,9 @@ private:
     QList<QUrl> file_urls;
     std::map<std::string, std::string> files_mapper;
 
-    QString target_deck_name;
-
+    QString import_deck_name;
     QStringList deck_name_list;
     QStringListModel* deck_name_list_model;
+
+    QProgressDialog* import_progress_dialog;
 };
