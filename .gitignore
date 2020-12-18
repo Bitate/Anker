@@ -1,12 +1,11 @@
+# Third parties
 jsoncpp-1.9.4
+googletest
+
+# Build environment
 build
+qt-build
 .vs
 .vscode
 out
-googletest
 CMakeLists.txt.user
-qt-build
-*.mp3
-*.png
-*.jpg
-*.mp4
