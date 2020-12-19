@@ -345,3 +345,8 @@ void Anker::set_import_deck_name(const QString& new_import_deck_name)
 {
     import_deck_name = new_import_deck_name;
 }
+
+void Anker::initialize_main_window()
+{
+    
+}

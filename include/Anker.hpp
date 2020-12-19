@@ -13,11 +13,15 @@
 
 #include <json/json.h>
 
+#include <QDebug>
+#include <QPushButton>
 #include <QList>
 #include <QUrl>
 #include <QObject>
 #include <QString>
+#include <QTreeView>
 #include <QApplication>
+#include <QFileDialog>
 #include <QProgressDialog>
 #include <QStringListModel>
 
@@ -111,6 +115,12 @@ public:
 
     std::string trim_qt_file_url_prefix(const std::string& file_url_with_prefix);
 
+    // Normal private functions
+private:
+    void initialize_main_window();
+
+
+
     // Qt getters
 public:
     QList<QUrl> get_file_urls() const;
@@ -135,9 +145,23 @@ private:
     QList<QUrl> file_urls;
     std::map<std::string, std::string> files_mapper;
 
+    /**
+     *  User selected deck name.
+     */
     QString import_deck_name;
+
+    /**
+     * All deck names in a list.
+     */
     QStringList deck_name_list;
+
+    /**
+     * Deck name list model.
+     */
     QStringListModel* deck_name_list_model;
 
+    /**
+     * Progress dialog object.
+     */
     QProgressDialog* import_progress_dialog;
 };
