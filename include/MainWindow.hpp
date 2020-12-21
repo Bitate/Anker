@@ -6,33 +6,42 @@
 #include <QAbstractItemModel>
 #include <QListView>
 #include <QStyledItemDelegate>
-
-// forward declaration
-class AnkiDeckNamesModel;
+#include <QStringListModel>
+#include <QListView>
+#include <QDebug>
 
 class MainWindow : public QMainWindow
 {
+    Q_OBJECT
 public:
     MainWindow();
 
 public:
+    /**
+     * Show application's main window.
+     */
     void show_main_window();
+
+    /**
+     * @brief Set deck names model.
+     * @param new_deck_name_list Given string list to be stored in the model.
+     */
+    void set_deck_name_list_model(const QStringList& new_deck_name_list);
+private:
+    void initialize_open_file_window();
+
+
+signals:
+
+public slots:
+    void response_open_file_push_button_clicked();
+    void response_files_choosen();
 
 private:
     QFileDialog* file_dialog;
     QPushButton* open_file_push_button;
-    QListView* deck_names_tree_view;
-    QStyledItemDelegate* styled_item_delegate;
 
-};
-
-class AnkiDeckNamesModel : public QAbstractItemModel
-{
-    Q_OBJECT
-public:
-    AnkiDeckNamesModel(QObject* parent = nullptr);
-
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-
-
+    QStyledItemDelegate* deck_name_list_delegate;
+    QStringListModel* deck_name_list_model;
+    QListView* deck_name_list_view;
 };

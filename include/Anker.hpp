@@ -1,6 +1,7 @@
 #pragma once
 
 #include "httplib.h"
+#include "MainWindow.hpp"
 
 #include <string>
 #include <stack>
@@ -115,6 +116,7 @@ public:
 
     std::string trim_qt_file_url_prefix(const std::string& file_url_with_prefix);
 
+
     // Normal private functions
 private:
     void initialize_main_window();
@@ -164,4 +166,6 @@ private:
      * Progress dialog object.
      */
     QProgressDialog* import_progress_dialog;
+
+    MainWindow main_window;
 };

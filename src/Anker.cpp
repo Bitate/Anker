@@ -3,13 +3,7 @@
 Anker::Anker(QObject* parent)
     : QObject(parent), deck_name_list_model(new QStringListModel())
 {
-    // For displaying deck names in hierarchy
-    for(auto& deck_name : get_deck_names())
-    {
-        deck_name_list << QString::fromStdString(deck_name);
-    }
 
-    deck_name_list_model->setStringList(deck_name_list);
     
     QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
 }
@@ -350,3 +344,5 @@ void Anker::initialize_main_window()
 {
     
 }
+
+
