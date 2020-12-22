@@ -3,9 +3,11 @@
 Anker::Anker(QObject* parent)
     : QObject(parent), deck_name_list_model(new QStringListModel())
 {
+    QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_file_urls_changed);
 
-    
-    QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_to_file_urls_changed);
+    // TODO: How to connect signal of main_window's QListWidget to Anker
+    //       Let main_window manipulate QListWidget of Anker?
+    // QObject::connect(main_window, &MainWindow::itemChanged, this, &Anker::response_deck_name_chosen);
 }
 
 Anker::~Anker()
@@ -200,7 +202,7 @@ QList<QUrl> Anker::get_file_urls() const
     return file_urls;
 }
 
-void Anker::response_to_file_urls_changed(const QList<QUrl>& new_file_urls)
+void Anker::response_file_urls_changed(const QList<QUrl>& new_file_urls)
 {
     // Map each mp3 file to a corresponding lrc file.
     foreach(QUrl file_url, new_file_urls)
@@ -324,7 +326,7 @@ std::string Anker::trim_qt_file_url_prefix(const std::string& file_url_with_pref
     return file_url_with_prefix.substr(8);
 }
 
-void Anker::set_deck_name_list_model(QStringListModel* new_deck_name_list_mode)
+void Anker::set_deck_name_list_widget(QStringListModel* new_deck_name_list_mode)
 {
     deck_name_list_model = new_deck_name_list_mode;
     emit deck_name_list_model_changed(new_deck_name_list_mode);
@@ -345,4 +347,20 @@ void Anker::initialize_main_window()
     
 }
 
+void Anker::show_main_window()
+{
+    QStringList deck_names;
+    for(auto& deck_name : get_deck_names())
+    {
+        deck_names << QString::fromStdString(deck_name);
+    }
 
+    main_window.set_deck_name_list_widget(deck_names);
+    main_window.show_main_window();
+}
+
+void Anker::response_deck_name_chosen(const QListWidgetItem *chosen_deck_name)
+{
+    if(chosen_deck_name->checkState() == Qt::Checked)
+        qDebug() << chosen_deck_name->text();
+}

@@ -31,7 +31,7 @@ class Anker : public QObject
     Q_OBJECT
     Q_PROPERTY(QString import_deck_name WRITE set_import_deck_name)
     Q_PROPERTY(QList<QUrl> file_urls READ get_file_urls WRITE set_file_urls NOTIFY file_urls_changed)
-    Q_PROPERTY(QStringListModel* deck_name_list_model READ get_deck_name_list_model WRITE set_deck_name_list_model)
+    Q_PROPERTY(QStringListModel* deck_name_list_model READ get_deck_name_list_model WRITE set_deck_name_list_widget)
     // Lifetime management
 public:
     explicit Anker(QObject* parent = nullptr);
@@ -116,6 +116,7 @@ public:
 
     std::string trim_qt_file_url_prefix(const std::string& file_url_with_prefix);
 
+    void show_main_window();
 
     // Normal private functions
 private:
@@ -131,7 +132,7 @@ public:
     // Qt setters
 public:
     void set_file_urls(const QList<QUrl>& new_file_urls);
-    void set_deck_name_list_model(QStringListModel* new_deck_name_list_mode);
+    void set_deck_name_list_widget(QStringListModel* new_deck_name_list_mode);
     void set_import_deck_name(const QString& new_import_deck_name);
 
     // Qt signals
@@ -141,7 +142,8 @@ signals:
 
     // Qt slots
 public slots:
-    void response_to_file_urls_changed(const QList<QUrl>& new_file_urls);
+    void response_file_urls_changed(const QList<QUrl>& new_file_urls);
+    void response_deck_name_chosen(const QListWidgetItem *chosen_deck_name);
     
 private:
     QList<QUrl> file_urls;

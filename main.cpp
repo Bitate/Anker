@@ -9,12 +9,7 @@ int main(int argc, char* argv[])
 
     Anker anker;
 
-    MainWindow m;
-
-    QStringList s;
-    s << "AAA" << "BBB";
-    m.set_deck_name_list_model(s);
-    m.show_main_window();
+    anker.show_main_window();
 
     return app.exec();
 }
