@@ -1,16 +1,15 @@
 #include "Anker.hpp"
 
 Anker::Anker(QObject* parent)
-    : QObject(parent),
-      deck_name_list_model(new QStringListModel())
+    : QObject(parent)
 {
-    QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_file_urls_changed);
     QObject::connect(&main_window, &MainWindow::deck_item_state_changed, this, &Anker::response_deck_item_state_changed);
+    QObject::connect(&main_window, &MainWindow::files_chosen, this, &Anker::response_file_urls_changed);
 }
 
 Anker::~Anker()
 {
-    delete deck_name_list_model;
+    delete import_progress_dialog;
 }
 
 Json::Value Anker::send_request( Json::Value& request )
@@ -189,17 +188,6 @@ bool Anker::delete_deck(const std::string& deck_name, const bool cards_too)
     return !is_request_failed( send_request(request) );
 }
 
-void Anker::set_file_urls(const QList<QUrl>& new_file_urls)
-{
-    file_urls = new_file_urls;
-    emit file_urls_changed(new_file_urls);
-}
-
-QList<QUrl> Anker::get_file_urls() const
-{
-    return file_urls;
-}
-
 void Anker::response_file_urls_changed(const QList<QUrl>& new_file_urls)
 {
     // Map each mp3 file to a corresponding lrc file.
@@ -324,27 +312,6 @@ std::string Anker::trim_qt_file_url_prefix(const std::string& file_url_with_pref
     return file_url_with_prefix.substr(8);
 }
 
-void Anker::set_deck_name_list_widget(QStringListModel* new_deck_name_list_mode)
-{
-    deck_name_list_model = new_deck_name_list_mode;
-    emit deck_name_list_model_changed(new_deck_name_list_mode);
-}
-
-QStringListModel* Anker::get_deck_name_list_model() const
-{
-    return deck_name_list_model;
-}
-
-void Anker::set_import_deck_name(const QString& new_import_deck_name)
-{
-    chosen_deck_name = new_import_deck_name;
-}
-
-void Anker::initialize_main_window()
-{
-    
-}
-
 void Anker::show_main_window()
 {
     QStringList deck_names;
@@ -357,16 +324,10 @@ void Anker::show_main_window()
     main_window.show_main_window();
 }
 
-void Anker::response_deck_item_state_changed(const QListWidgetItem *changed_deck_item)
+void Anker::response_deck_item_state_changed(const QListWidgetItem* changed_deck_item)
 {
     if(changed_deck_item->checkState() == Qt::Checked)
-    {
-        qDebug() << "Check: " << changed_deck_item->text();
         chosen_deck_name = changed_deck_item->text();
-    }
     else
-    {
-        qDebug() << "Uncheck: " << changed_deck_item->text();
         chosen_deck_name.clear();
-    }
 }

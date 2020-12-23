@@ -6,15 +6,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(all_header_files
-    ../include/Anker.hpp
     ../include/httplib.h
-    ../include/Clipboard.hpp
+    ../include/Anker.hpp
     ../include/MainWindow.hpp
 )
 
 set(all_source_files
     Anker.cpp
-    Clipboard.cpp
     MainWindow.cpp
 )
 

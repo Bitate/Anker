@@ -29,5 +29,8 @@ Windows 10
 
 6. Done. Remember to review today's cards :)
 
+## Useful Links
+* [Qt: Checkable list with QListWidget or QListView](https://www.walletfox.com/course/qtcheckablelist.php)
+
 ## A Little More
 I'm a newbie in C++ and a life-time learner. Feel free to contact me at papersflyaway@gmail.com or 1660513875@qq.com :)

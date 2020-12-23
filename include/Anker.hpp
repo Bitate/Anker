@@ -14,17 +14,12 @@
 
 #include <json/json.h>
 
-#include <QDebug>
-#include <QPushButton>
-#include <QList>
 #include <QUrl>
+#include <QList>
 #include <QObject>
 #include <QString>
-#include <QTreeView>
 #include <QApplication>
-#include <QFileDialog>
 #include <QProgressDialog>
-#include <QStringListModel>
 
 class Anker : public QObject
 {
@@ -35,7 +30,6 @@ public:
     explicit Anker(QObject* parent = nullptr);
     ~Anker();
 
-    // Normal public functions
 public:     
     /**
      * @brief  Send json request to anki.
@@ -52,8 +46,16 @@ public:
      */
     bool create_deck(const std::string& deck_name);
     
+    /**
+     * @brief  Whether Anki has given deck with the name of @b deck_name.
+     * @return  True if Anki has that deck.
+     */
     bool has_deck(const std::string& deck_name);
 
+    /**
+     * @brief  Delete card with the name of @b card_name.
+     * @return  True if succeeds.
+     */
     bool delete_card(const std::string& card_name);
 
     /**
@@ -91,7 +93,11 @@ public:
      */
     std::vector< std::string > get_deck_names();
 
-    
+    /**
+     * @brief  Get the content at the top of clipboard,
+     *         namely the latest one.
+     * @return  True if succeeds.
+     */
     bool get_last_record_from_clipboard();
 
     /**
@@ -101,48 +107,62 @@ public:
      */
     bool is_request_failed(const Json::Value& response);
 
+    /**
+     * @brief  Get unique string.
+     * @return  Unique string.
+     */
     std::string get_unique_identifier();
 
+    /**
+     * @brief  Move mp3 file to Anki media foler.
+     * @param  file_path  Mp3 file path.
+     * @param  new_file_name  Anki media folder path + mp3 file path.
+     * @return  True if succeeds.
+     */
     bool move_file_to_anki_media_folder(const std::string& file_path, const std::string& new_file_name);
     
     /**
      * @brief  Trim the leading "file:///" of given file url.
      * @param  file_url_with_prefix  File url to be trimmed.
-     * @return  Trimmed std::string.
+     * @return  File string without "file:///" at the beginning.
      */
     std::string trim_qt_file_url_prefix(const QUrl& file_url_with_prefix);
 
+    /**
+     * @brief  Trim the leading "file:///" of given file url.
+     * @param  file_url_with_prefix  File url string to be trimmed.
+     * @return  File string without "file:///" at the beginning.
+     */
     std::string trim_qt_file_url_prefix(const std::string& file_url_with_prefix);
 
+    /**
+     * @brief Display main window GUi.
+     */
     void show_main_window();
-
-    // Normal private functions
-private:
-    void initialize_main_window();
-
-    // Qt getters
-public:
-    QList<QUrl> get_file_urls() const;
-    QStringListModel* get_deck_name_list_model() const;
-
-    // Qt setters
-public:
-    void set_file_urls(const QList<QUrl>& new_file_urls);
-    void set_deck_name_list_widget(QStringListModel* new_deck_name_list_mode);
-    void set_import_deck_name(const QString& new_import_deck_name);
-
-    // Qt signals
-signals:
-    void file_urls_changed(const QList<QUrl>& new_file_urls);
-    void deck_name_list_model_changed(const QStringListModel* new_deck_name_list_mode);
 
     // Qt slots
 public slots:
+    /**
+     * @brief  Handle file urls selected by user.
+     * @param  new_file_urls  User selected file urls.
+     */
     void response_file_urls_changed(const QList<QUrl>& new_file_urls);
-    void response_deck_item_state_changed(const QListWidgetItem *changed_deck_item);
+
+    /**
+     * @brief  Handle deck item state changed(either selected or unselected by user).
+     * @param changed_deck_item  Deck item.
+     */
+    void response_deck_item_state_changed(const QListWidgetItem* changed_deck_item);
     
 private:
+    /**
+     * Stores user selected file urls.
+     */
     QList<QUrl> file_urls;
+
+    /**
+     * mp3 file name as key, while lrc file name as value.
+     */
     std::map<std::string, std::string> files_mapper;
 
     /**
@@ -156,14 +176,12 @@ private:
     QStringList deck_name_list;
 
     /**
-     * Deck name list model.
-     */
-    QStringListModel* deck_name_list_model;
-
-    /**
      * Progress dialog object.
      */
     QProgressDialog* import_progress_dialog;
 
+    /**
+     * For managing main window GUI.
+     */
     MainWindow main_window;
 };

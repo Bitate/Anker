@@ -1,26 +1,38 @@
 #include "MainWindow.hpp"
 
 MainWindow::MainWindow()
-    : file_dialog(new QFileDialog(this)),
-      open_file_push_button(new QPushButton("Open Folder", this)),
+    : open_file_push_button(new QPushButton("Open Files", this)),
       deck_name_list_widget(new QListWidget(this)),
+      file_dialog(new QFileDialog(this)),
       is_deck_name_chosen(false)
 {
+    initialize_open_file_window();
+    
     QObject::connect(deck_name_list_widget, &QListWidget::itemChanged, this, &MainWindow::response_deck_item_state_changed);
     QObject::connect(open_file_push_button, &QPushButton::clicked, this, &MainWindow::response_open_file_push_button_clicked);
-    QObject::connect(file_dialog, &QFileDialog::filesSelected, this, &MainWindow::response_files_chosen);
+    QObject::connect(file_dialog, &QFileDialog::urlsSelected, this, &MainWindow::files_chosen);
+}
+
+MainWindow::~MainWindow()
+{
+    delete file_dialog;
+    delete open_file_push_button;
+    delete deck_name_list_widget;
 }
 
 void MainWindow::show_main_window()
 {
     setWindowTitle("Anker");
-    setFixedSize(1024, 666);
+    setFixedSize(330, 660);
 
     open_file_push_button->setFixedSize(100, 50);
     deck_name_list_widget->setFixedHeight(500);
 
     QVBoxLayout* vertical_box_layout = new QVBoxLayout();
+    vertical_box_layout->addWidget(new QLabel("Please choose one deck to be imported"), 0, Qt::AlignCenter);
     vertical_box_layout->addWidget(deck_name_list_widget, 0, Qt::AlignCenter);
+    vertical_box_layout->addWidget(new QLabel("Please click the button below to choose files output from Aboboo"), 0, Qt::AlignCenter);
+    vertical_box_layout->addWidget(new QLabel("Tip: press Ctrl+A to choose all files"), 0, Qt::AlignCenter);
     vertical_box_layout->addWidget(open_file_push_button, 0, Qt::AlignCenter);
 
     QWidget* window = new QWidget();
@@ -32,8 +44,6 @@ void MainWindow::show_main_window()
 
 void MainWindow::set_deck_name_list_widget(const QStringList& new_deck_name_list)
 {
-    // How can I ensure only one QListWidgetItem is checkable within a QlistWidget?
-
     deck_name_list_widget->addItems(new_deck_name_list);
 
     QListWidgetItem* deck_name;
@@ -51,21 +61,15 @@ void MainWindow::response_open_file_push_button_clicked()
     file_dialog->open();
 }
 
-void MainWindow::response_files_chosen()
-{
-    // process chosen files
-}
-
 void MainWindow::initialize_open_file_window()
 {
-    // set open mode and default open path
+    file_dialog->setFileMode(QFileDialog::ExistingFiles);
 }
 
-void MainWindow::response_deck_item_state_changed(const QListWidgetItem *changed_deck_item)
+void MainWindow::response_deck_item_state_changed(const QListWidgetItem* changed_deck_item)
 {
     if(changed_deck_item->checkState() == Qt::Checked)
     {
-        // uncheck previous checked item if user has already checked one
         if(is_deck_name_chosen)
         {
             QListWidgetItem* deck_name;
