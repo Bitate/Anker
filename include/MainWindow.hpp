@@ -3,12 +3,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QPushButton>
-#include <QAbstractItemModel>
-#include <QListView>
-#include <QStyledItemDelegate>
-#include <QStringListModel>
 #include <QVBoxLayout>
-#include <QListView>
 #include <QListWidget>
 #include <QDebug>
 
@@ -33,8 +28,10 @@ private:
     void initialize_open_file_window();
 
 signals:
+    void deck_item_state_changed(const QListWidgetItem *changed_deck_item);
 
 public slots:
+    void response_deck_item_state_changed(const QListWidgetItem *changed_deck_item);
     void response_open_file_push_button_clicked();
     void response_files_chosen();
 
@@ -42,4 +39,5 @@ private:
     QFileDialog* file_dialog;
     QPushButton* open_file_push_button;
     QListWidget* deck_name_list_widget;
+    bool is_deck_name_chosen;
 };

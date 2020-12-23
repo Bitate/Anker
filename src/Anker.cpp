@@ -1,13 +1,11 @@
 #include "Anker.hpp"
 
 Anker::Anker(QObject* parent)
-    : QObject(parent), deck_name_list_model(new QStringListModel())
+    : QObject(parent),
+      deck_name_list_model(new QStringListModel())
 {
     QObject::connect(this, &Anker::file_urls_changed, this, &Anker::response_file_urls_changed);
-
-    // TODO: How to connect signal of main_window's QListWidget to Anker
-    //       Let main_window manipulate QListWidget of Anker?
-    // QObject::connect(main_window, &MainWindow::itemChanged, this, &Anker::response_deck_name_chosen);
+    QObject::connect(&main_window, &MainWindow::deck_item_state_changed, this, &Anker::response_deck_item_state_changed);
 }
 
 Anker::~Anker()
@@ -251,7 +249,7 @@ void Anker::response_file_urls_changed(const QList<QUrl>& new_file_urls)
         // Trim the leading "[00:00.00]"
         std::string lrc_string = lrc_string_stream.str().substr(10);
 
-        if(!add_note(import_deck_name.toStdString(), anki_audio_link, lrc_string, {}))
+        if(!add_note(chosen_deck_name.toStdString(), anki_audio_link, lrc_string, {}))
         {
             // log: add note error
             continue;
@@ -339,7 +337,7 @@ QStringListModel* Anker::get_deck_name_list_model() const
 
 void Anker::set_import_deck_name(const QString& new_import_deck_name)
 {
-    import_deck_name = new_import_deck_name;
+    chosen_deck_name = new_import_deck_name;
 }
 
 void Anker::initialize_main_window()
@@ -359,8 +357,16 @@ void Anker::show_main_window()
     main_window.show_main_window();
 }
 
-void Anker::response_deck_name_chosen(const QListWidgetItem *chosen_deck_name)
+void Anker::response_deck_item_state_changed(const QListWidgetItem *changed_deck_item)
 {
-    if(chosen_deck_name->checkState() == Qt::Checked)
-        qDebug() << chosen_deck_name->text();
+    if(changed_deck_item->checkState() == Qt::Checked)
+    {
+        qDebug() << "Check: " << changed_deck_item->text();
+        chosen_deck_name = changed_deck_item->text();
+    }
+    else
+    {
+        qDebug() << "Uncheck: " << changed_deck_item->text();
+        chosen_deck_name.clear();
+    }
 }
