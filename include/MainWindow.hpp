@@ -1,11 +1,11 @@
 #pragma once
 
+#include <QLabel>
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QListWidget>
-#include <QLabel>
 
 class MainWindow : public QMainWindow
 {

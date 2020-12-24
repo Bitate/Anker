@@ -3,14 +3,13 @@
 #include "httplib.h"
 #include "MainWindow.hpp"
 
-#include <string>
-#include <stack>
 #include <map>
-#include <fstream>
-#include <ctime>
-#include <strstream>
-#include <iostream>
 #include <regex>
+#include <stack>
+#include <ctime>
+#include <string>
+#include <fstream>
+#include <strstream>
 
 #include <json/json.h>
 
@@ -18,6 +17,7 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <QMessageBox>
 #include <QApplication>
 #include <QProgressDialog>
 
@@ -145,6 +145,7 @@ public slots:
     /**
      * @brief  Handle file urls selected by user.
      * @param  new_file_urls  User selected file urls.
+     * @remark  Move mp3 file to Anki media folder and change the name to the unique string;
      */
     void response_file_urls_changed(const QList<QUrl>& new_file_urls);
 

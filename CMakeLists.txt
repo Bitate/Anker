@@ -17,9 +17,9 @@ add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(googletest)
 
-add_executable(anker-win64 WIN32
+add_executable(anker-win32 WIN32
     main.cpp
 )
-target_link_libraries(anker-win64
+target_link_libraries(anker-win32
     Anker
 )

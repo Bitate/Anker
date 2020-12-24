@@ -189,18 +189,17 @@ bool Anker::delete_deck(const std::string& deck_name, const bool cards_too)
 }
 
 void Anker::response_file_urls_changed(const QList<QUrl>& new_file_urls)
-{
-    // Map each mp3 file to a corresponding lrc file.
+{ 
     foreach(QUrl file_url, new_file_urls)
     {
         if(file_url.fileName().toStdString().find(".mp3") != std::string::npos)
-            files_mapper.insert( {trim_qt_file_url_prefix(file_url), ""} );
+            files_mapper.insert( {trim_qt_file_url_prefix(file_url), std::string()} );
     }
+
     foreach(QUrl file_url, new_file_urls)
     {
         if(file_url.fileName().toStdString().find(".lrc") != std::string::npos)
         {
-            // Form lrc file's corresponding mp3 file path
             std::string mp3_file_path = file_url.toString().toStdString().substr(0, (file_url.toString().toStdString().size()-3)) + "mp3";
             files_mapper[trim_qt_file_url_prefix(mp3_file_path)] = trim_qt_file_url_prefix(file_url);
         }
@@ -213,29 +212,35 @@ void Anker::response_file_urls_changed(const QList<QUrl>& new_file_urls)
     int progress_dialog_current_value = 0;
     for(auto file_pair : files_mapper)
     {
-        // 1. Move mp3 file to Anki media folder and change its name to the unique string;
-        // 2. The reference of mp3 file in Anki is in the form of: [sound:ODH_encn_Collins_inextricable_0.mp3];
-        // 3. Trim the leading text of *.lrc files;
-
         std::string unique_identifier = get_unique_identifier();
 
         move_file_to_anki_media_folder(file_pair.first.data(), unique_identifier + ".mp3");
 
         std::string anki_audio_link = "[sound:" + unique_identifier + ".mp3]";
 
-        std::ifstream lrc_file(file_pair.second.data());
-        if(!lrc_file.is_open())
+        std::string lrc_string;
+        if( !file_pair.second.empty() )
         {
-            // log: cannot open lrc file
-            continue;
+            std::ifstream lrc_file(file_pair.second.data());
+
+            if(!lrc_file.is_open())
+            {
+                // log: cannot open lrc file
+                continue;
+            }
+
+            // lrc_string is in the form of: "[00:00.00]Silicon Valley is the cradle of innovation"
+            std::ostringstream lrc_string_stream;
+            lrc_string_stream << lrc_file.rdbuf();
+
+            // Trim the leading "[00:00.00]"
+            lrc_string = lrc_string_stream.str().substr(10);
+        }
+        else // If mp3 file does not has a corresponding lrc file.
+        {
+            lrc_string = "";
         }
 
-        // lrc_string is in the form of: "[00:00.00]Silicon Valley is the cradle of innovation"
-        std::ostringstream lrc_string_stream;
-        lrc_string_stream << lrc_file.rdbuf();
-
-        // Trim the leading "[00:00.00]"
-        std::string lrc_string = lrc_string_stream.str().substr(10);
 
         if(!add_note(chosen_deck_name.toStdString(), anki_audio_link, lrc_string, {}))
         {
