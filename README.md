@@ -26,7 +26,7 @@ Windows 10
 
 4. Click "Open Files" button and select all mp3 and lrc files output from Aboboo. Then click "Open" button.
 
-![open mp3 and lrc files](resources/screenhost_3.png)
+![open mp3 and lrc files](resources/screenshot_3.png)
 
 5. Waiting for importing
 
